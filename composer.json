@@ -1,0 +1,33 @@
+{
+    "name": "bloom-ux/wp-helpers",
+    "description": "A collection of helper functions and classes for WordPress",
+    "type": "wordpress-muplugin",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Felipe Lavín",
+            "email": "felipe@bloom-ux.com"
+        }
+    ],
+    "autoload": {
+        "files": [
+            "src/functions.php"
+        ]
+    },
+    "require": {},
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.3",
+        "wp-coding-standards/wpcs": "^0.14.1",
+        "phan/phan": "^0.12.14",
+        "jakub-onderka/php-parallel-lint": "^1.0",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.4.4",
+        "phpcompatibility/php-compatibility": "*"
+    },
+    "scripts": {
+        "fix": "phpcbf --standard=WordPress src/ --extensions=php",
+        "lint": "parallel-lint src/ --blame --exclude vendor",
+        "sniff": "phpcs --standard=WordPress src/ --extensions=php --cache",
+        "analyze": "phan -p -j 4 --color",
+        "compat": "phpcs -p --standard=PHPCompatibility --runtime-set testVersion 5.3 -n src/ --extensions=php --ignore=autoload_static.php --cache"
+    }
+}

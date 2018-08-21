@@ -54,7 +54,7 @@ function do_excerpt( $post, $args = null ) {
 	);
 	$post   = apply_filters( 'do_excerpt_post', $post, $args );
 	$params = apply_filters( 'do_excerpt_args', $args, $post );
-	if ( $params['wrap'] ) {
+	if ( isset( $params['wrap'] ) ) {
 		$wrap_id    = $params['wrap_id'] ? ' id="' . esc_attr( $params['wrap_id'] ) . '"' : null;
 		$wrap_class = $params['wrap_class'] ? ' class="' . esc_attr( $params['wrap_class'] ) . '"' : null;
 		$wrap       = '<' . $params['wrap'] . $wrap_id . $wrap_class . '>';
@@ -100,7 +100,7 @@ function do_excerpt( $post, $args = null ) {
 	}
 
 	if ( $out ) {
-		if ( $params['wrap'] ) {
+		if ( isset( $params['wrap'] ) ) {
 			$wrap .= $out . '</' . $params['wrap'] . '>';
 			$out   = $wrap;
 		}

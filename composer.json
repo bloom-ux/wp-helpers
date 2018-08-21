@@ -23,6 +23,9 @@
         "dealerdirect/phpcodesniffer-composer-installer": "^0.4.4",
         "phpcompatibility/php-compatibility": "*"
     },
+    "extra": {
+        "installer-name": "bloom-ux-wp-helpers"
+    },
     "scripts": {
         "fix": "phpcbf --standard=WordPress src/ --extensions=php",
         "lint": "parallel-lint src/ --blame --exclude vendor",

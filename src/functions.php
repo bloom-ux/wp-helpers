@@ -6,6 +6,31 @@
  */
 
 /**
+ * Return part of a string, cutting the string on full words
+ *
+ * @param string         $str The original string.
+ * @param int            $n      The maximum number of characters to return.
+ * @param boolean|string $hellip Whether to add ellipsis at the end if the string is longer, or provide a custom suffix.
+ * @return string Chopped string, optionally using ellipsis if the original was longer than the limit
+ */
+function substr_full_words( $str, $n, $hellip = false ) {
+	if ( strlen( $str ) > $n ) {
+		$out = substr( strip_tags( $str ), 0, $n );
+		$out = explode( ' ', $out );
+		array_pop( $out );
+		$out = implode( ' ', $out );
+		if ( is_string( $hellip ) ) {
+			$out .= ' ' . $hellip;
+		} elseif ( is_bool( $hellip ) && $hellip ) {
+			$out .= ' [&hellip;]';
+		}
+	} else {
+		$out = $str;
+	}
+	return $out;
+}
+
+/**
  * Generate a exceprt from whatever argument it's passed to it
  *
  * @param WP_Post|string      $post Post object with excerpt and/or content OR string.
@@ -39,7 +64,7 @@ function do_excerpt( $post, $args = null ) {
 		$excerpt = wp_strip_all_tags( $excerpt, true );
 		$excerpt = trim( $excerpt );
 		if ( strlen( $excerpt ) > $params['length'] ) {
-			$excerpt = smart_substr( $excerpt, $params['length'] );
+			$excerpt = substr_full_words( $excerpt, $params['length'] );
 			if ( $params['hellip'] ) {
 				$excerpt .= ' ' . $params['hellip'];
 			}
@@ -51,7 +76,7 @@ function do_excerpt( $post, $args = null ) {
 	} elseif ( is_object( $post ) ) {
 		if ( isset( $post->post_excerpt ) && ! empty( $post->post_excerpt ) ) {
 			if ( $params['strict'] && strlen( $post->post_excerpt ) > $params['length'] ) {
-				$buff = smart_substr( $post->post_excerpt, $params['length'] );
+				$buff = substr_full_words( $post->post_excerpt, $params['length'] );
 				if ( $params['hellip'] ) {
 					$buff .= ' ' . $params['hellip'];
 				}

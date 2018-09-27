@@ -5,6 +5,7 @@
  * @package Bloom_UX_WP_Helpers
  */
 
+if ( ! function_exists('substr_full_words') ) :
 /**
  * Return part of a string, cutting the string on full words
  *
@@ -29,7 +30,9 @@ function substr_full_words( $str, $n, $hellip = false ) {
 	}
 	return $out;
 }
+endif;
 
+if ( ! function_exists('do_excerpt') ) :
 /**
  * Generate a exceprt from whatever argument it's passed to it
  *
@@ -111,3 +114,4 @@ function do_excerpt( $post, $args = null ) {
 		}
 	}
 }
+endif;

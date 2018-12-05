@@ -8,3 +8,10 @@
  * Author URI: https://www.bloom-ux.com
  * License: GPL-3.0-or-later
  */
+
+/**
+ * Use default hooks
+ */
+ if ( ! defined( 'BLOOM_UX_WP_HELPERS_USE_HOOKS' ) || BLOOM_UX_WP_HELPERS_USE_HOOKS ) {
+	require_once __DIR__ .'/src/hooks.php';
+}

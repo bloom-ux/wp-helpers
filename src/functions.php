@@ -115,3 +115,77 @@ if ( ! function_exists( 'do_excerpt' ) ) :
 		}
 	}
 endif;
+
+
+if ( ! function_exists( 'locate_theme_part' ) ) :
+	/**
+	 * Locate a theme partial.
+	 *
+	 * By default, it will also look into the "partials" subdirectory of the current
+	 * theme or template.
+	 *
+	 * @param string $slug Name of the generic partial.
+	 * @param string $name Name of the specific partial.
+	 * @return string      Full path to the located partial, empty string if nothing is found.
+	 */
+	function locate_theme_part( $slug, $name = '' ) {
+		static $stylesheetpath, $templatepath;
+		$templates = array( "{$slug}.php" );
+		if ( $name ) {
+			$templates[] = "{$slug}-{$name}.php";
+		}
+		// más específico primero.
+		$templates      = array_reverse( $templates );
+		$located        = '';
+		$stylesheetpath = get_stylesheet_directory();
+		$templatepath   = get_template_directory();
+
+		foreach ( $templates as $template ) {
+			if ( ! $template ) {
+				continue;
+			}
+			if ( file_exists( $stylesheetpath . '/' . $template ) ) {
+				$located = $stylesheetpath . '/' . $template;
+				break;
+			} elseif ( file_exists( $templatepath . '/' . $template ) ) {
+				$located = $templatepath . '/' . $template;
+				break;
+			} elseif ( file_exists( $stylesheetpath . '/partials/' . $template ) ) {
+				$located = $stylesheetpath . '/partials/' . $template;
+			} elseif ( file_exists( $templatepath . '/partials/' . $template ) ) {
+				$located = $templatepath . '/partials/' . $template;
+			}
+		}
+		return $located;
+	}
+endif;
+
+if ( ! function_exists( 'get_template_part_with' ) ) :
+	/**
+	 * Use a template partial with the provided data.
+	 *
+	 * Information passed on with $data will be available by their key name on the included partial.
+	 * If one of the keys conflicts with an existing variable, it will be prefixed with "data_"
+	 *
+	 * @param string $slug Name of the template partial.
+	 * @param string $name Specific name of the partial. Optional, can be omitted.
+	 * @param array  $data  An array of data that will be available within the partial.
+	 * @return void
+	 */
+	function get_template_part_with( $slug, $name = '', $data = array() ) {
+		if ( count( func_get_args() ) === 2 ) {
+			$data = $name;
+			$name = '';
+		}
+		$file = locate_theme_part( $slug, $name );
+		if ( ! $file ) {
+			return;
+		}
+		do_action( 'bloom_ux_helpers_get_template_part_with', $file, $data );
+
+		// phpcs:disable
+		extract( $data, EXTR_PREFIX_SAME, 'data_' );
+		// phpcs:enable
+		include $file;
+	}
+endif;

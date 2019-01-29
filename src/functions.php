@@ -134,28 +134,37 @@ if ( ! function_exists( 'locate_theme_part' ) ) :
 		if ( $name ) {
 			$templates[] = "{$slug}-{$name}.php";
 		}
-		// más específico primero.
+
+		// more specific template name first
 		$templates      = array_reverse( $templates );
+
 		$located        = '';
 		$stylesheetpath = get_stylesheet_directory();
 		$templatepath   = get_template_directory();
 
+		$template_paths = array();
 		foreach ( $templates as $template ) {
 			if ( ! $template ) {
 				continue;
 			}
-			if ( file_exists( $stylesheetpath . '/' . $template ) ) {
-				$located = $stylesheetpath . '/' . $template;
-				break;
-			} elseif ( file_exists( $templatepath . '/' . $template ) ) {
-				$located = $templatepath . '/' . $template;
-				break;
-			} elseif ( file_exists( $stylesheetpath . '/partials/' . $template ) ) {
-				$located = $stylesheetpath . '/partials/' . $template;
-			} elseif ( file_exists( $templatepath . '/partials/' . $template ) ) {
-				$located = $templatepath . '/partials/' . $template;
-			}
+			$template_paths[] = $stylesheetpath .'/'. $template;
+			$template_paths[] = $templatepath .'/'. $template;
+			$template_paths[] = $stylesheetpath .'/partials/'. $template;
+			$template_paths[] = $templatepath .'/partials/'. $template;
 		}
+
+		$template_paths = apply_filters( 'bloom_ux_helpers_theme_partial_path', $template_paths, $slug, $name, $templates );
+
+		// remove duplicates (in case the template and theme are the same)
+		$template_paths = array_unique( $template_paths );
+
+		foreach ( $template_paths as $path ) {
+			if ( file_exists( $path ) ) {
+				$located = $path;
+				break;
+			}
+		 }
+
 		return $located;
 	}
 endif;

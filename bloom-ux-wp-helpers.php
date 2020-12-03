@@ -15,3 +15,7 @@
  if ( ! defined( 'BLOOM_UX_WP_HELPERS_USE_HOOKS' ) || BLOOM_UX_WP_HELPERS_USE_HOOKS ) {
 	require_once __DIR__ .'/src/hooks.php';
 }
+
+if ( ! defined( 'BLOOM_UX_WP_HELPERS_USE_POLYFILLS' ) || BLOOM_UX_WP_HELPERS_USE_POLYFILLS ) {
+	require_once __DIR__ .'/src/polyfills.php';
+}

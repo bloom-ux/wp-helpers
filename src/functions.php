@@ -68,27 +68,27 @@ if ( ! function_exists( 'do_excerpt' ) ) :
 			$excerpt = trim( $excerpt );
 			if ( strlen( $excerpt ) > $params['length'] ) {
 				$excerpt = substr_full_words( $excerpt, $params['length'] );
-				if ( $params['hellip'] ) {
+				if ( isset( $params['hellip'] ) && $params['hellip'] ) {
 					$excerpt .= ' ' . $params['hellip'];
 				}
 			}
-			if ( $params['append'] ) {
+			if ( isset( $params['append'] ) && $params['append'] ) {
 				$excerpt .= ' ' . $params['append'];
 			}
 			$out .= apply_filters( 'the_excerpt', $excerpt );
 		} elseif ( is_object( $post ) ) {
 			if ( isset( $post->post_excerpt ) && ! empty( $post->post_excerpt ) ) {
-				if ( $params['strict'] && strlen( $post->post_excerpt ) > $params['length'] ) {
+				if ( isset( $params['strict'] ) && $params['strict'] && strlen( $post->post_excerpt ) > $params['length'] ) {
 					$buff = substr_full_words( $post->post_excerpt, $params['length'] );
 					if ( $params['hellip'] ) {
 						$buff .= ' ' . $params['hellip'];
 					}
-					if ( $params['append'] ) {
+					if ( isset( $params['append'] ) && $params['append'] ) {
 						$buff .= ' ' . $params['append'];
 					}
 					$out .= apply_filters( 'the_excerpt', $buff );
 				} else {
-					if ( $params['append'] ) {
+					if ( isset( $params['append'] ) && $params['append'] ) {
 						$post->post_excerpt .= ' ' . $params['append'];
 					}
 					$out .= apply_filters( 'the_excerpt', $post->post_excerpt );
@@ -107,7 +107,7 @@ if ( ! function_exists( 'do_excerpt' ) ) :
 				$wrap .= $out . '</' . $params['wrap'] . '>';
 				$out   = $wrap;
 			}
-			if ( $params['echo'] ) {
+			if ( isset( $params['echo'] ) && $params['echo'] ) {
 				echo esc_html( $out );
 			} else {
 				return $out;
